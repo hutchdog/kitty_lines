@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 1550672992561995420}
   - component: {fileID: 350171725881476984}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -92,7 +92,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f0fa7a3a623774e7b8e1b28a45350f9a, type: 2}
+  - {fileID: 2100000, guid: 1daf76790cf164862a11a299a03f1412, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -123,9 +123,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8279885822415506822}
-  - component: {fileID: 895569190685947201}
+  - component: {fileID: 5724953594430747291}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Cell
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -148,7 +148,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &895569190685947201
+--- !u!114 &5724953594430747291
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -157,11 +157,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 7048454428658185744}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 779c1c180c8ff407b814ee5bbe05d119, type: 3}
+  m_Script: {fileID: 11500000, guid: 04ed69db8bcb241a8a09a6a37b71b991, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   meshRenderer: {fileID: 350171725881476984}
   materials:
-  - {fileID: 2100000, guid: f0fa7a3a623774e7b8e1b28a45350f9a, type: 2}
-  - {fileID: 2100000, guid: 8dac531d47f964956b8c71161df6dba1, type: 2}
-  - {fileID: 2100000, guid: 029c2024851364190b9190111f46b429, type: 2}
+  - {fileID: 2100000, guid: a30cc93d9a7e143129f3807a8da31ff2, type: 2}
+  - {fileID: 2100000, guid: 1daf76790cf164862a11a299a03f1412, type: 2}

@@ -1,75 +1,39 @@
+using System;
 using UnityEngine;
 
 namespace Code
 {
-    [RequireComponent(typeof(MeshFilter))]
-    [RequireComponent(typeof(MeshRenderer))]
     public class FieldView : MonoBehaviour
     {
-        private MeshFilter meshFilter;
-
-        private MeshRenderer meshRenderer;
-
-        private Mesh mesh;
-
-        private Material defaultMaterial;
-
         public Vector2 fieldSize;
 
+        public GameObject cellPrefab;
+        
         private void Awake()
         {
-            meshFilter = GetComponent<MeshFilter>();
-            mesh = new Mesh();
-
-            meshRenderer = GetComponent<MeshRenderer>();
-
-            defaultMaterial = new Material(Shader.Find("Diffuse"));
-
             //TODO: Failsafe settings, use camera sizes
-            if (fieldSize.x != 0 && fieldSize.y != 0) return;
+            if (fieldSize.x == 0 || fieldSize.y == 0)
+            {
+                throw new Exception("Field view sizes cannot be zero!");
+            }
 
-            fieldSize.x = 10;
-            fieldSize.y = 12;
-        }
+            if (cellPrefab == null)
+            {
+                return;
+            }
+            
+            for (var y = 0; y < fieldSize.y; ++y)
+            {
+                var startIndex = y % 2;
+                for (var x = 0; x < fieldSize.x; ++x)
+                {
+                    var cellElement = Instantiate(cellPrefab, transform);
+                    cellElement.transform.SetLocalPositionAndRotation(new Vector3(x - fieldSize.x / 2, y - fieldSize.y / 2, 0.1f), Quaternion.identity);
 
-        private void Start()
-        {
-            var vertices = new Vector3[4];
-            var width = 0.5f * fieldSize.x;
-            var height = 0.5f * fieldSize.y;
-
-            vertices[0] = new Vector3(-width, height, 0);
-            vertices[1] = new Vector3(width, height, 0);
-            vertices[2] = new Vector3(-width, -height, 0);
-            vertices[3] = new Vector3(width, -height, 0);
-
-            mesh.SetVertices(vertices);
-
-            Vector3[] normals = new Vector3[4];
-            normals[0] = new Vector3(0, 0, -1);
-            normals[1] = new Vector3(0, 0, -1);
-            normals[2] = new Vector3(0, 0, -1);
-            normals[3] = new Vector3(0, 0, -1);
-
-            mesh.SetNormals(normals);
-
-            var indices = new int[6];
-            indices[0] = 0;
-            indices[1] = 1;
-            indices[2] = 2;
-            indices[3] = 2;
-            indices[4] = 1;
-            indices[5] = 3;
-
-            mesh.SetIndices(indices, MeshTopology.Triangles, 0);
-
-            meshFilter.mesh = mesh;
-
-            meshRenderer.material = defaultMaterial;
-        }
-
-        private void Update()
-        {
+                    var cellView = cellElement.GetComponent<CellView>();
+                    cellView.SetDark((startIndex + x) % 2 == 0);
+                }
+            }
         }
     }
 }
