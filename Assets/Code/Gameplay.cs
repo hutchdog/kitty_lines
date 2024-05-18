@@ -39,7 +39,7 @@ namespace Code
         {
             var time = Time.deltaTime;
             
-            Debug.LogFormat("<b><color=blue>State is </color></b> {0}.", gameplayState.ToShortString());
+            //Debug.LogFormat("<b><color=blue>State is </color></b> {0}.", gameplayState.ToShortString());
             
             switch (gameplayState)
             {
@@ -109,6 +109,7 @@ namespace Code
 
         private void HandleInput(float time)
         {
+            /*
             gameplayInput.Update(time);
             if (gameplayInput.MoveLeft)
             {
@@ -128,6 +129,7 @@ namespace Code
             dropMultiplier = gameplayInput.Drop ? 0.1f : 1.0f;
             
             gameplayInput.Reset();
+            */
         }
     }
 }
