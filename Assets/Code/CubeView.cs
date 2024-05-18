@@ -7,13 +7,33 @@ namespace Code
     {
         public Renderer meshRenderer;
 
-        public Material[] materials;
+        private static Material[] materials;
         
         private void Awake()
         {
-            if (materials == null || materials.Length == 0)
+            if (materials == null)
             {
-                throw new Exception("Materials for blocks are empty");
+                materials = new Material[4];
+
+                materials[0] = new Material(Shader.Find("Diffuse"))
+                {
+                    color = Color.black // Just to find bugs? 
+                };
+
+                materials[1] = new Material(Shader.Find("Diffuse"))
+                {
+                    color = Color.red
+                };
+
+                materials[2] = new Material(Shader.Find("Diffuse"))
+                {
+                    color = Color.green
+                };
+
+                materials[3] = new Material(Shader.Find("Diffuse"))
+                {
+                    color = Color.blue
+                };
             }
         }
         
@@ -24,7 +44,7 @@ namespace Code
 
             if (meshRenderer)
             {
-                meshRenderer.material = materials[fillValue - 1];
+                meshRenderer.material = materials[fillValue];
             }
         }
     }

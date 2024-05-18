@@ -7,8 +7,6 @@ namespace Code
     {
         public Field gameField;
 
-        public PreviewZone preview;
-
         public UI gameUI;
 
         private GameplayInput gameplayInput = new();
@@ -16,9 +14,6 @@ namespace Code
         private float gameplayTimer = 0.0f;
         private float dropMultiplier = 1.0f;
         private int score = 0;
-        
-        private Tetramino previewTetramino;
-        private Tetramino currentTetramino;
         
         private void Start()
         {
@@ -33,11 +28,7 @@ namespace Code
             }
 
             gameField.ResetField();
-            //gameField.SetDebugElements();
-
-            preview.ResetField();
-            //preview.SetDebugElements();
-
+            
             gameUI.ResetUI();
             gameUI.SetScoreText(score);
 
@@ -55,12 +46,9 @@ namespace Code
                 case GameplayState.Init:
                 {
                     gameField.ResetField();
-                    preview.ResetField();
+                    gameField.SetDebugElements();
 
-                    var newTetraminoType = Random.Range(0, (int)Tetramino.Type.MaxValue);
                     var newTetraminoColor = Random.Range(1, 4);
-                    previewTetramino = new Tetramino((Tetramino.Type)newTetraminoType, newTetraminoColor);
-                    preview.Set(0, 0, previewTetramino);
                     
                     gameplayState = GameplayState.Drop;
                     gameplayTimer = 0.0f;
@@ -69,16 +57,7 @@ namespace Code
                 }
                 case GameplayState.Drop:
                 {
-                    currentTetramino = previewTetramino;
-                    
-                    var newTetraminoType = Random.Range(0, (int)Tetramino.Type.MaxValue);
                     var newTetraminoColor = Random.Range(1, 4);
-                    previewTetramino = new Tetramino((Tetramino.Type)newTetraminoType, newTetraminoColor);
-                    
-                    preview.ResetField();
-                    preview.Set(0, 0, previewTetramino);
-                    
-                    gameField.Drop(currentTetramino);
                     
                     gameplayState = GameplayState.UpdateInput;
                     gameplayTimer = 0.0f;
@@ -125,8 +104,6 @@ namespace Code
                     
                     break;
                 }
-                default:
-                    break;
             }
         }
 

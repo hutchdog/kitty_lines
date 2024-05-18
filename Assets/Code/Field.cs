@@ -5,11 +5,7 @@ namespace Code
     [ExecuteInEditMode]
     public class Field : MonoBehaviour
     {
-        private Tetramino currentFigure;
-
         private Vector2Int currentPosition;
-        
-        public Tetramino Figure => currentFigure;  
         
         virtual public int GetFieldWidth()
         {
@@ -126,8 +122,7 @@ namespace Code
 
         public virtual void SetDebugElements()
         {
-            currentFigure = new Tetramino(Tetramino.Type.L, 1);
-            SetTetramino(4, 0, currentFigure);
+            CreateElement(3, 3, 2);
         }
 
         #region Single element ops
@@ -203,188 +198,28 @@ namespace Code
         }
 
         #endregion
-
-        #region Whole tetramino ops
-
-        protected void SetTetramino(int posX, int posY, Tetramino tetramino)
-        {
-            currentPosition.x = posX;
-            currentPosition.y = posY;
-            
-            //TODO: Safety checks & skips
-            int[,] figure = tetramino.GetFigure();
-
-            for (int i = 0; i < 4; ++i)
-            for (int j = 0; j < 4; ++j)
-            {
-                if (figure[i, j] != 0)
-                    CreateElement(posX + i, posY + j, tetramino.GetFill());
-            }
-        }
-
-        protected void RemoveTetramino(int posX, int posY, Tetramino tetramino)
-        {
-            //TODO: Safety checks & skips
-            var figure = tetramino.GetFigure();
-
-            for (var i = 0; i < 4; ++i)
-            for (var j = 0; j < 4; ++j)
-            {
-                if (figure[i, j] != 0)
-                    RemoveElement(posX + i, posY + j);
-            }
-        }
-
-        protected bool CheckMoveTetramino(int posX, int posY, Tetramino tetramino)
-        {
-            //TODO: Safety checks & skips
-            var figure = tetramino.GetFigure();
-
-            for (var i = 0; i < 4; ++i)
-            for (var j = 0; j < 4; ++j)
-            {
-                if (figure[i, j] != 0 && CheckFieldBorders(i + posX, j + posY) == false)
-                    return false;
-                
-                if (figure[i, j] != 0 && GetElement(i + posX, j + posY) != null)
-                    return false;
-            }
-
-            return true;
-        }
         
-        protected bool CheckRotateTetramino(int posX, int posY, Tetramino tetramino)
-        {
-            //TODO: Safety checks & skips
-            var figure = tetramino.GetFigure();
-
-            var newFigure = new int[4, 4];
-            for (var i = 0; i < 4; ++i)
-            {
-                for (var j = 0; j < 4; ++j)
-                {
-                    newFigure[i, j] = figure[j, 3 - i];
-                }
-            }
-            
-            for (var i = 0; i < 4; ++i)
-            for (var j = 0; j < 4; ++j)
-            {
-                if (newFigure[i, j] != 0 && CheckFieldBorders(i + posX, j + posY) == false)
-                    return false;
-                
-                if (newFigure[i, j] != 0 && GetElement(i + posX, j + posY) != null)
-                    return false;
-            }
-
-            return true;
-        }
-        
-        #endregion
-
         public void MoveLeft()
         {
-            RemoveTetramino(currentPosition.x, currentPosition.y, currentFigure);
-            if (CheckMoveTetramino(currentPosition.x - 1, currentPosition.y, currentFigure))
-            {
-                Debug.LogFormat("<b><color=yellow>Figure</color></b> moved left.");
-                SetTetramino(currentPosition.x - 1, currentPosition.y, currentFigure);
-            }
-            else
-            {
-                SetTetramino(currentPosition.x, currentPosition.y, currentFigure);
-            }
         }
         
         public void MoveRight()
         {
-            RemoveTetramino(currentPosition.x, currentPosition.y, currentFigure);
-            if (CheckMoveTetramino(currentPosition.x + 1, currentPosition.y, currentFigure))
-            {
-                Debug.LogFormat("<b><color=yellow>Figure</color></b> moved right.");
-                SetTetramino(currentPosition.x + 1, currentPosition.y, currentFigure);
-            }
-            else
-            {
-                SetTetramino(currentPosition.x, currentPosition.y, currentFigure);
-            }
         }
         
         public bool MoveDown()
         {
-            RemoveTetramino(currentPosition.x, currentPosition.y, currentFigure);
-            if (CheckMoveTetramino(currentPosition.x, currentPosition.y - 1, currentFigure))
-            {
-                Debug.LogFormat("<b><color=yellow>Figure</color></b> moved down.");
-                SetTetramino(currentPosition.x, currentPosition.y - 1, currentFigure);
-                return true;
-            }
-
-            SetTetramino(currentPosition.x, currentPosition.y, currentFigure);
             return false;
         }
         
         public bool RotateFigure()
         {
-            if (currentFigure == null) return false;
-            RemoveTetramino(currentPosition.x, currentPosition.y, currentFigure);
-            if (CheckRotateTetramino(currentPosition.x, currentPosition.y, currentFigure))
-            {
-                Debug.LogFormat("<b><color=yellow>Figure</color></b> rotated.");
-                currentFigure.Rotate();
-                
-            }
-            
-            SetTetramino(currentPosition.x, currentPosition.y, currentFigure);
             return false;
         }
 
-        public void Drop(Tetramino tetramino)
-        {
-            if (tetramino == null) return;
-            currentFigure = tetramino;
-            SetTetramino(4, 20, currentFigure);
-        }
-
-        public void Set(int posX, int posY, Tetramino tetramino)
-        {
-            if (tetramino == null) return;
-            currentFigure = tetramino;
-            SetTetramino(posX, posY, tetramino);
-        }
-        
         public int CheckLines()
         {
-            var lines = 0;
-            for (var y = GetFieldHeight(); y >= 0; --y)
-            {
-                var elementCount = 0;
-                for (var x = 0; x < GetFieldWidth(); ++x)
-                {
-                    if (GetElement(x, y) != null)
-                    {
-                        ++elementCount;
-                    }
-                }
-
-                if (elementCount != GetFieldWidth()) continue;
-
-                ++lines;
-                
-                for (var x = 0; x < GetFieldWidth(); ++x)
-                {
-                    RemoveElement(x, y);
-                }
-
-                for (var ty = y; ty < GetFieldHeight() - 1; ++ty)
-                {
-                    for (var x = 0; x < GetFieldWidth(); ++x)
-                    {
-                        MoveElement(x, ty + 1, x, ty);
-                    }
-                }
-            }
-            return lines;
+            return 0;
         }
     }
 }
